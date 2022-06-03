@@ -1,107 +1,33 @@
-# SQL_Prisma
+# Práctica Cliente-Servidor
 
-*Objetivo: Usar Prisma DB para conectar una base de datos de PostgreSQL con un servidor Express.*    
+*Objetivo: Usar el proyecto de Prisma y el de Vue, para generar un proyecto completo.*    
 
-- Instalar Prisma en un proyecto de js e inicializarlo.  
-<pre><code>npm install prisma --save-dev
-npx prisma init
+- Instalar Cors para consumir la API.   
+<pre><code>npm install cors --save
 </code></pre>
 
-- Crear un modelo en `schema.prisma` para agregar una tabla a una base de datos ya existente en PostgreSQL.  
-```js
-model Explorer {
-  id Int @id @default(autoincrement())
-  name String @unique
-  username String @db.VarChar(255)
-  mission String @db.VarChar(255)
-  azureCertification Boolean @default(false)
-  dateCreated DateTime @default(now())
-  lastUpdated DateTime @updatedAt
-}
-```
+- Modificar el servidor para utilizar la URL: http://localhost:8081.   
+![image](https://user-images.githubusercontent.com/97483147/171947274-711624a8-1fbd-4c42-bf82-26f961fcf459.png)
 
-- Versionar la base de datos.
-<pre><code>npx prisma migrate dev --name init
-</code></pre>
-
-- Crear un servidor de Express para leer, insertar, modificar y borar información en la base de datos.
-```js
-const express = require('express');
-const app = express();
-app.use(express.json());
-const port = process.env.PORT || 3000;
-
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-
-app.get('/', (req, res) => {
-  res.json({message: 'alive'});
-});
-
-app.get('/explorers', async (req, res) => {
-    const allExplorers =  await prisma.explorer.findMany({});
-    res.json(allExplorers);
-});
-
-app.get('/explorers/:id', async (req, res) => {
-    const id = req.params.id;
-    const explorer = await prisma.explorer.findUnique({where: {id: parseInt(id)}});
-    res.json(explorer);
-});
-
-app.post('/explorers', async (req, res) => {
-    const explorer = {
-      name: req.body.name,
-      username: req.body.username,
-      mission: req.body.mission
-     };
-    const message = 'Explorer creado.';
-    await prisma.explorer.create({data: explorer});
-    return res.json({message});
-});
-
-app.put('/explorers/:id', async (req, res) => {
-	const id = parseInt(req.params.id);
-
-	await prisma.explorer.update({
-		where: {
-			id: id
-		},
-		data: {
-			mission: req.body.mission
-		}
-	})
-
-	return res.json({message: "Actualizado correctamente"});
-});
-
-app.delete('/explorers/:id', async (req, res) => {
-	const id = parseInt(req.params.id);
-	await prisma.explorer.delete({where: {id: id}});
-	return res.json({message: "Eliminado correctamente"});
-});
-
-app.listen(port, () => {
-  console.log(`Listening to requests on port ${port}`);
-});
-```
+- Correr ambos proyectos (Servidor y Cliente) para modificar la base de datos.  
+![image](https://user-images.githubusercontent.com/97483147/171948573-0162995a-9c6c-409e-bfbc-e09c22c1f9f2.png)
 ---
 
 *Resultados:*  
 - Leer toda la base.  
-![LeerTodo](https://user-images.githubusercontent.com/97483147/171555609-ea17e9f4-92bc-424c-80d1-83bd69826948.gif)   
+![image](https://user-images.githubusercontent.com/97483147/171948776-1d67624d-37d1-459d-a1e6-65577dab0863.png)  
 
-- Leer una fila de datos.
-![LeerFila](https://user-images.githubusercontent.com/97483147/171556133-1215daa4-72fd-44d6-9e60-ecb03e455b2b.gif)
+- Leer un explorer.
+![LeerFilaFull](https://user-images.githubusercontent.com/97483147/171949825-94c64417-e51f-4d9a-b334-a1dea815f1d5.gif)
 
-- Insertar datos.  
-![insertar](https://user-images.githubusercontent.com/97483147/171556648-58f1a978-13c2-41bf-a5a8-8db6c3b963df.gif)
+- Insertar explorer.  
+![InsertarExplorer](https://user-images.githubusercontent.com/97483147/171950566-7adc14c4-0c05-4ca8-bb86-ac13bc497c4a.gif)
 
-- Modificar datos.  
-![modificar](https://user-images.githubusercontent.com/97483147/171557692-a94d733e-bb2f-4b9d-ab27-890fac1b7f99.gif)   
+- Modificar explorer.  
+  ![ModificarExplorerFull](https://user-images.githubusercontent.com/97483147/171951380-d795ff3e-974a-4bd4-84e0-caa1ee40d5ac.gif)
 
-- Eliminar datos.  
-![eliminar](https://user-images.githubusercontent.com/97483147/171558066-94fff176-d1b9-4b83-97aa-4108ad3c8aef.gif)
+- Eliminar explorer.  
+![EliminarExplorerFull](https://user-images.githubusercontent.com/97483147/171952237-4dcf5756-ea08-4597-9765-c8745c5318c6.gif)
 
 ---
 
