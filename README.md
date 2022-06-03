@@ -36,12 +36,13 @@
 - vue v3.0.0
 - axios v0.26.0
 - bootstrap v4.6.0
-- co-js v6.5
-    "jquery": "^3.6.0",
-    "popper.js": "^1.16.1",
+- core-js v3.6.5
+- jquery v3.6.0
+- popper.js v1.16.1
 - npm v8.10.0
 - node v17.8.0
 - prisma v3.14.0
 - express v4.18.1
+- cors v2.8.5
 
 ## Práctica propuesta por Carlo Gilmar 
